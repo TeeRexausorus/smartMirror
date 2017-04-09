@@ -9,9 +9,9 @@
             }
         </style>
         <div id="weather">
-            Le ciel de Paris est : [[weather]] <img src="http://openweathermap.org/img/w/{{weatherIcon}}"/>
+            Le ciel de Paris est : [[weather]] <img src="http://openweathermap.org/img/w/{{weatherIcon}}"/>, il fait [[temp]]
         </div>
-        <iron-ajax id="ia_weather" url="http://api.openweathermap.org/data/2.5/weather?q=Paris&appid=fa42afa917d3f364a6dfb86b10853ef2&lang=fr"
+        <iron-ajax id="ia_weather" url="http://api.openweathermap.org/data/2.5/weather?q={{city}}&appid={{apiKey}}&lang=fr&units={{units}}"
                    handle-as="json"
                    on-response="handleWeather">
         </iron-ajax>
@@ -26,8 +26,21 @@
                 weather: {
                     type: String
                 },
-
+                units: {
+                    type: String,
+                    value: "metric"
+                },
                 weatherIcon: {
+                    type: String,
+                    value: "01d.png"
+                },
+                temp: {
+                    type: String
+                },
+                apiKey: {
+                    type:String
+                },
+                city: {
                     type: String
                 }
 
@@ -42,11 +55,11 @@
                 that.$.ia_weather.generateRequest();
                 t = setTimeout(function () {
                     that.startWeather()
-                }, 500);
+                }, 5000);
             },
 
             handleWeather: function(event, resp){
-                console.log(JSON.stringify(event.detail.response.weather[0]));
+                this.temp = Math.round(event.detail.response.main.temp) + (this.units == "metric" ? "°C" : (this.units == "imperial" ? "F" : "K"));
                 this.weather = event.detail.response.weather[0].description;
                 this.weatherIcon = event.detail.response.weather[0].icon + ".png";
             },
