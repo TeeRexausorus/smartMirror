@@ -1,44 +1,27 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/byutv-jsonp/byutv-jsonp.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../xkcd-element/xkcd-element.html">
+<link rel="import" href="../weather-element/weather-element.html">
+<link rel="import" href="../train-element/train-element.html">
 
+<link rel="stylesheet" href="smartMirror.css">
 <dom-module id="smartMirror-app">
   <template>
     <style>
       :host {
-      display: block;
+        display: block;
       }
     </style>
-        <h2>Hello [[prop1]]</h2>
-        <div id="time">Il est : [[time]]</div>
-        <div id="weather">Le ciel de Paris est : [[weather]] <img src="http://openweathermap.org/img/w/{{weatherIcon}}"/></div>
-
-        <div id="trainsFromEpinay">
-            <span>Prochains train pour Paris (départ Epinay):</span>
-            <ul>
-                <template is="dom-repeat" items="[[arrayTrainsEpinay]]">
-                    <li>{{item}}</li>
-                </template>
-            </ul>
-        </div>
-        <div id="xkcd">
-            <img src="{{xkcdPic}}"/><br/>
-            <span>{{xkcdAlt}}</span>
-        </div>
-        <iron-ajax id="ia_weather" url="http://api.openweathermap.org/data/2.5/weather?q=Paris&appid=fa42afa917d3f364a6dfb86b10853ef2&lang=fr"
-                    handle-as="json"
-                    on-response="handleWeather">
-        </iron-ajax>
-      <iron-ajax id="ia_epinay" url=""
-                 handle-as="json"
-                 on-response="handleEpinay">
-      </iron-ajax>
-
-      <byutv-jsonp id="byutv_xkcd" url="http://dynamic.xkcd.com/api-0/jsonp/comic"
-                   last-response="handleXkcd"
-                   on-response="_handleXkcd"
-                   debounce-duration="300">
-      </byutv-jsonp>
+    <h2>Hello [[prop1]]</h2>
+    <div id="time">
+        Il est : [[time]]
+    </div>
+    <weather-element></weather-element>
+    <xkcd-element ></xkcd-element>
+    <div id="trainsFromEpinay">
+        <train-element stop-area="{{stop_area_epinay}}"></train-element>
+    </div>
   </template>
 
   <script>
@@ -46,41 +29,22 @@
     is: 'smartMirror-app',
 
     properties: {
-    prop1: {
-    type: String,
-    value: 'Master',
-    },
-    stop_area_epinay: {
-        type: String,
-        value: 'stop_area:OCE:SA:87545228'
-    },
-    weather: {
-        type: String
-    },
-
-    weatherIcon: {
-        type: String
-    },
-
-    xkcdPic:{
-        type: String
-    },
-    xkcdAlt:{
-        type: String
-    },
-    time: {
-        type: String
-    },
-    arrayTrainsEpinay: {
-        type: Array
-    }
+        prop1: {
+            type: String,
+            value: 'Master'
+        },
+        stop_area_epinay: {
+            type: String,
+            value: 'stop_area:OCE:SA:87545228'
+        },
+        time: {
+            type: String
+        }
     },
 
     ready: function () {
-        this.$.ia_weather.generateRequest();
         this.startTime();
-        this.startEpinay();
-        this.startXkcd();
+        //this.startEpinay();
     },
 
     checkTime: function (i) {
@@ -99,76 +63,16 @@
         }, 500);
     },
 
-    startWeather: function() {
-        that = this;
-        that.$.ia_weather.generateRequest();
-        t = setTimeout(function () {
-            that.startWeather()
-        }, 500);
-    },
 
-    startEpinay: function () {
-        that = this;
-        var today = new Date(),
-            h = this.checkTime(today.getHours()),
-            m = this.checkTime(today.getMinutes()),
-            s = this.checkTime(today.getSeconds()),
-            aaaa = today.getFullYear(),
-            jj = today.getDate(),
-            mm = today.getMonth();
-        that.$.ia_epinay.url = "https://api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:OCE:SA:87545228/departures?datetime=" + aaaa + mm + jj + "T" + h + m + s;
-        that.$.ia_epinay.headers = {'Authorization' : '23ce4867-09d8-4f7e-8d02-c93bf1eba0a6'};
-        that.$.ia_epinay.generateRequest();
-        t = setTimeout(function () {
-            that.startEpinay()
-        }, 120000); //one call per hour
-    },
 
-    startXkcd: function () {
-        that = this;
-        that.$.byutv_xkcd.generateRequest();
-        t = setTimeout(function () {
-            that.startXkcd()
-        }, 86400000); //One call a day
-    },
 
     obsArray: function(arr){
         console.log(arr);
     },
 
-    time_formater: function(strDate){
-        var st = "26.04.2013";
-        var st2 = "20170408T215000";
-        var dt = new Date();
-        dt.setFullYear(strDate.substring(0,4), strDate.substring(5,6) - 1, strDate.substring(6,8));
-        dt.setHours(strDate.substring(9,11))
-        dt.setMinutes(strDate.substring(11,13));
-        dt.setSeconds(strDate.substring(13,15));
-        return dt.getHours() + "H" + dt.getMinutes();
-        },
 
-    handleWeather: function(event, resp){
-        console.log(JSON.stringify(event.detail.response.weather[0]));
-        this.weather = event.detail.response.weather[0].description;
-        this.weatherIcon = event.detail.response.weather[0].icon + ".png";
-    },
-
-    handleEpinay: function() {
-        arrayTrainsEpinay = [];
-        for (i = 0; i < event.detail.response.departures.length; i++){
-            if(event.detail.response.departures[i].display_informations.direction.includes("Paris")){
-                arrayTrainsEpinay.push(this.time_formater(event.detail.response.departures[i].stop_date_time.arrival_date_time));
-            }
-        }
-        this.arrayTrainsEpinay = arrayTrainsEpinay;
-    },
-
-    _handleXkcd: function(event) {
-        this.xkcdPic = event.detail.img;
-
-        this.xkcdAlt = event.detail.alt;
-    }
 
     });
+
   </script>
 </dom-module>

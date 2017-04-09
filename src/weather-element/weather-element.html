@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="weather-element">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div id="weather">
+            Le ciel de Paris est : [[weather]] <img src="http://openweathermap.org/img/w/{{weatherIcon}}"/>
+        </div>
+        <iron-ajax id="ia_weather" url="http://api.openweathermap.org/data/2.5/weather?q=Paris&appid=fa42afa917d3f364a6dfb86b10853ef2&lang=fr"
+                   handle-as="json"
+                   on-response="handleWeather">
+        </iron-ajax>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'weather-element',
+
+            properties: {
+                weather: {
+                    type: String
+                },
+
+                weatherIcon: {
+                    type: String
+                }
+
+            },
+
+            ready: function () {
+                this.startWeather();
+            },
+
+            startWeather: function() {
+                var that = this;
+                that.$.ia_weather.generateRequest();
+                t = setTimeout(function () {
+                    that.startWeather()
+                }, 500);
+            },
+
+            handleWeather: function(event, resp){
+                console.log(JSON.stringify(event.detail.response.weather[0]));
+                this.weather = event.detail.response.weather[0].description;
+                this.weatherIcon = event.detail.response.weather[0].icon + ".png";
+            },
+
+        });
+    </script>
+</dom-module>

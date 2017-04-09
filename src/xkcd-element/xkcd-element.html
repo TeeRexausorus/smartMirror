@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/byutv-jsonp/byutv-jsonp.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="xkcd-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div id="xkcd">
+      <img src="{{xkcdPic}}"/><br/>
+      <span>{{xkcdAlt}}</span>
+    </div>
+
+    <byutv-jsonp id="byutv_xkcd" url="http://dynamic.xkcd.com/api-0/jsonp/comic"
+                 last-response="handleXkcd"
+                 on-response="_handleXkcd"
+                 debounce-duration="300">
+    </byutv-jsonp>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'xkcd-element',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'xkcd-element',
+        },
+        xkcdPic:{
+            type: String
+        },
+        xkcdAlt:{
+            type: String
+        }
+      },
+
+      ready: function () {
+          this.startXkcd();
+      },
+
+      startXkcd: function () {
+          that = this;
+          that.$.byutv_xkcd.generateRequest();
+          t = setTimeout(function () {
+              that.startXkcd()
+          }, 86400000); //One call a day
+      },
+
+      _handleXkcd: function(event) {
+          this.xkcdPic = event.detail.img;
+
+          this.xkcdAlt = event.detail.alt;
+      }
+
+
+    });
+  </script>
+</dom-module>

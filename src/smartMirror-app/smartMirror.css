@@ -1,0 +1,26 @@
+.left{
+    position: fixed;
+    left: 0;
+    height: 100px;
+}
+
+.right{
+    position: fixed;
+    right: 0;
+    text-align: right;
+    float: right;
+}
+
+.top{
+    position: fixed;
+    top: 0;
+}
+
+.bottom{
+    position: fixed;
+    bottom: 0;
+}
+
+#trainsFromEpinay{
+    width: 100%;
+}
