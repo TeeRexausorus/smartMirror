@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="smartMirror-app">
+  <template>
+    <style>
+      :host {
+      display: block;
+      background-color: black;
+      color: white;
+      }
+    </style>
+    <h2>Hello [[prop1]]</h2>
+    <iron-ajax id="ia-weather" url="http://samples.openweathermap.org/data/2.5/weather?q=Paris&appid=fa42afa917d3f364a6dfb86b10853ef2"
+	       handle-as="json"
+	       on-response="handleResponse">
+      
+    </iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+    
+    is: 'smartMirror-app',
+    
+    properties: {
+    prop1: {
+    type: String,
+    value: 'smartMirror-app',
+    },
+    handleResponse: function(data){
+    console.log(data);
+    },
+    ready: function(){
+    this.$.ia-weather.generateRequest();
+    }
+    },
+
+    });
+  </script>
+</dom-module>
