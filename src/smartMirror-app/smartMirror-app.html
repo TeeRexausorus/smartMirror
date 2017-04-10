@@ -4,6 +4,7 @@
 <link rel="import" href="../xkcd-element/xkcd-element.html">
 <link rel="import" href="../weather-element/weather-element.html">
 <link rel="import" href="../train-element/train-element.html">
+<link rel="import" href="../time-element/time-element.html">
 
 <link rel="stylesheet" href="smartMirror.css">
 <dom-module id="smartMirror-app">
@@ -13,14 +14,14 @@
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
-    <div id="time">
-        Il est : [[time]]
-    </div>
-    <weather-element api-key="fa42afa917d3f364a6dfb86b10853ef2" city="Paris" units="metric"></weather-element>
+
+    <h2>Hello [[name]]</h2>
+    <time-element></time-element>
+
+    <weather-element></weather-element>
     <xkcd-element ></xkcd-element>
     <div id="trainsFromEpinay">
-        <train-element stop-area="{{stop_area_epinay}}"></train-element>
+        <train-element id="epinay" stop-area="{{stop_area_epinay}}"></train-element>
     </div>
   </template>
 
@@ -29,21 +30,17 @@
     is: 'smartMirror-app',
 
     properties: {
-        prop1: {
+        name: {
             type: String,
             value: 'Master'
         },
         stop_area_epinay: {
             type: String,
             value: 'stop_area:OCE:SA:87545228'
-        },
-        time: {
-            type: String
         }
     },
 
     ready: function () {
-        this.startTime();
         //this.startEpinay();
     },
 
@@ -51,17 +48,6 @@
         return (i < 10) ? "0" + i : i;
     },
 
-    startTime: function () {
-        that = this;
-        var today = new Date(),
-            h = this.checkTime(today.getHours()),
-            m = this.checkTime(today.getMinutes()),
-            s = this.checkTime(today.getSeconds());
-        this.time = h + ":" + m + ":" + s;
-        t = setTimeout(function () {
-            that.startTime()
-        }, 500);
-    },
 
 
 

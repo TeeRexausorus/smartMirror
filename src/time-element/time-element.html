@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="time-element">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div class="big">
+            <span>[[time]]</span>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'time-element',
+
+            properties: {
+                prop1: {},
+                time: {
+                    type: String
+                }
+
+            },
+
+            ready: function () {
+                this.startTime();
+            },
+
+            checkTime: function (i) {
+                return (i < 10) ? "0" + i : i;
+            },
+
+            startTime: function () {
+                var that = this;
+                var today = new Date(),
+                    h = this.checkTime(today.getHours()),
+                    m = this.checkTime(today.getMinutes()),
+                    s = this.checkTime(today.getSeconds());
+                this.time = h + ":" + m + ":" + s;
+                t = setTimeout(function () {
+                    that.startTime();
+                }, 500);
+            }
+
+
+        });
+    </script>
+</dom-module>
