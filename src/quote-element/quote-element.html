@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="quote-element">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div>
+            "{{quote}}"<br/>
+            -{{author}}
+        </div>
+        <iron-ajax id="ia_quote" url="https://andruxnet-random-famous-quotes.p.mashape.com/"
+                   handle-as="json"
+                   on-response="handleQuote">
+        </iron-ajax>
+    </template>
+
+    <script>
+        Polymer({ //2nZuhwpbBMmsh6JOlfpR9tExPDAWp1kTzHYjsnfZzbOwHZCDkE
+
+            is: 'quote-element',
+
+            properties: {
+                quote: {
+                    type: String
+                },
+                author: {
+                    type: String
+                }
+            },
+
+            ready: function () {
+                this.startQuote();
+            },
+
+            startQuote: function() {
+                var that = this;
+                that.$.ia_quote.headers = {'X-Mashape-Key' : '2nZuhwpbBMmsh6JOlfpR9tExPDAWp1kTzHYjsnfZzbOwHZCDkE',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'};
+                that.$.ia_quote.generateRequest();
+                t = setTimeout(function () {
+                    that.startQuote()
+                }, 3600000);
+            },
+
+            handleQuote: function(event, resp){
+                console.log(event.detail.response);
+                this.quote = event.detail.response.quote;
+                this.author = event.detail.response.author;
+            },
+
+        });
+    </script>
+</dom-module>
