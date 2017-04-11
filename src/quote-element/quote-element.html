@@ -19,7 +19,7 @@
     </template>
 
     <script>
-        Polymer({ //2nZuhwpbBMmsh6JOlfpR9tExPDAWp1kTzHYjsnfZzbOwHZCDkE
+        Polymer({
 
             is: 'quote-element',
 
@@ -38,9 +38,10 @@
 
             startQuote: function() {
                 var that = this;
-                that.$.ia_quote.headers = {'X-Mashape-Key' : '2nZuhwpbBMmsh6JOlfpR9tExPDAWp1kTzHYjsnfZzbOwHZCDkE',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json'};
+                that.$.ia_quote.headers = {
+                    'X-Mashape-Key' : '2nZuhwpbBMmsh6JOlfpR9tExPDAWp1kTzHYjsnfZzbOwHZCDkE',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'};
                 that.$.ia_quote.generateRequest();
                 t = setTimeout(function () {
                     that.startQuote()

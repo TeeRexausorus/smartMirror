@@ -25,6 +25,14 @@ weather-element{
     left: 20px;
     bottom: 20px;
 }
+
+quote-element{
+    position: fixed;
+    bottom: 100px;
+    text-align: center;
+
+}
+
 .bottom{
     position: fixed;
     bottom: 0;

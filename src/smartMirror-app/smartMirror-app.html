@@ -5,6 +5,7 @@
 <link rel="import" href="../weather-element/weather-element.html">
 <link rel="import" href="../train-element/train-element.html">
 <link rel="import" href="../time-element/time-element.html">
+<link rel="import" href="../quote-element/quote-element.html">
 
 <link rel="stylesheet" href="smartMirror.css">
 <dom-module id="smartMirror-app">
@@ -18,11 +19,10 @@
     <h2>Hello [[name]]</h2>
     <time-element></time-element>
 
-    <weather-element></weather-element>
+    <weather-element city="Paris" api-key="fa42afa917d3f364a6dfb86b10853ef2"></weather-element>
     <xkcd-element ></xkcd-element>
-    <div id="trainsFromEpinay">
-        <train-element id="epinay" stop-area="{{stop_area_epinay}}"></train-element>
-    </div>
+    <train-element id="epinay" stop-area="{{stop_area_epinay}}"></train-element>
+    <quote-element></quote-element>
   </template>
 
   <script>
