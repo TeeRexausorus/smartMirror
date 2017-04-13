@@ -29,6 +29,10 @@
                 },
                 author: {
                     type: String
+                },
+                frequency: {
+                    type: Number,
+                    value: 3600000
                 }
             },
 
@@ -45,11 +49,10 @@
                 that.$.ia_quote.generateRequest();
                 t = setTimeout(function () {
                     that.startQuote()
-                }, 3600000);
+                }, this.frequency); // 1 per hour
             },
 
             handleQuote: function(event, resp){
-                console.log(event.detail.response);
                 this.quote = event.detail.response.quote;
                 this.author = event.detail.response.author;
             },

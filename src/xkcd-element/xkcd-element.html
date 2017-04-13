@@ -11,7 +11,7 @@
     </style>
     <div id="xkcd">
       <img src="{{xkcdPic}}"/><br/>
-      <span>{{xkcdAlt}}</span>
+      <span>"{{xkcdAlt}}"</span>
     </div>
 
     <byutv-jsonp id="byutv_xkcd" url="http://dynamic.xkcd.com/api-0/jsonp/comic"
@@ -36,6 +36,10 @@
         },
         xkcdAlt:{
             type: String
+        },
+        frequency: {
+            type: Number,
+            value: 86400000
         }
       },
 
@@ -48,7 +52,7 @@
           that.$.byutv_xkcd.generateRequest();
           t = setTimeout(function () {
               that.startXkcd()
-          }, 86400000); //One call a day
+          }, this.frequency); //One call a day
       },
 
       _handleXkcd: function(event) {

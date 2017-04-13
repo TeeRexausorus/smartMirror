@@ -33,6 +33,10 @@
 
                 arrayTrains: {
                     type: Array
+                },
+                frequency: {
+                    type: Number,
+                    value: 1200000
                 }
 
             },
@@ -70,7 +74,7 @@
                 that.$.ia_train.generateRequest();
                 t = setTimeout(function () {
                     that.startTrain()
-                }, 3600000); //one call per hour
+                }, this.frequency); //one call per hour
             },
 
 

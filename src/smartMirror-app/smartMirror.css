@@ -3,6 +3,7 @@ xkcd-element{
     right: 20px;
     bottom: 20px;
     text-align: right;
+    width: 50%;
 }
 
 train-element#epinay{
@@ -24,13 +25,15 @@ weather-element{
     position: fixed;
     left: 20px;
     bottom: 20px;
+    width: 50%;
 }
 
 quote-element{
     position: fixed;
     bottom: 100px;
+    left: 0;
     text-align: center;
-
+    width: 35%;
 }
 
 .bottom{
